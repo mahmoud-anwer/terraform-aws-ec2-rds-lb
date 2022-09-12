@@ -6,8 +6,8 @@ resource "random_integer" "rand" {
 
 locals {
   common_tags = {
-    company = var.company
-    project = var.project
+    company = "Squadio"
+    project = "Testing Terraform"
   }
 
   s3_bucket_name = lower("my-bucket-${random_integer.rand.result}")
