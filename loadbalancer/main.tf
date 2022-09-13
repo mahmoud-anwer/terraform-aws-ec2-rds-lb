@@ -1,18 +1,4 @@
-data "terraform_remote_state" "networking" {
-  backend = "local"
 
-  config = {
-    path = "../networking/terraform.tfstate"
-  }
-}
-
-data "terraform_remote_state" "compute" {
-  backend = "local"
-
-  config = {
-    path = "../compute/terraform.tfstate"
-  }
-}
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"

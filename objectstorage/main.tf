@@ -58,31 +58,6 @@ resource "aws_iam_role_policy" "allow_s3_all" {
 EOF
 }
 
-# module "iam_policy" {
-#   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-#   version = "5.3.3"
-#   name        = "allow_s3_all"
-#   path        = "/"
-
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": [
-#         "s3:*"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": [
-#                 "arn:aws:s3:::${local.s3_bucket_name}",
-#                 "arn:aws:s3:::${local.s3_bucket_name}/*"
-#             ]
-#     }
-#   ]
-# }
-# EOF
-# }
-
 resource "aws_iam_instance_profile" "nginx_profile" {
   name = "nginx_profile"
   role = aws_iam_role.allow_ec2_s3.name

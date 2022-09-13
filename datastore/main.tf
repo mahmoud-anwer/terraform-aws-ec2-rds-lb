@@ -1,10 +1,3 @@
-data "terraform_remote_state" "networking" {
-  backend = "local"
-
-  config = {
-    path = "../networking/terraform.tfstate"
-  }
-}
 
 # I can't destroy the RDS because of the final snapshot
 module "db" {
@@ -36,6 +29,8 @@ module "db" {
 
   # Database Deletion Protection
   deletion_protection = true
+
+  skip_final_snapshot=true
 
   tags = local.common_tags
 }
