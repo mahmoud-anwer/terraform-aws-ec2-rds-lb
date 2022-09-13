@@ -1,4 +1,3 @@
-
 ##################################################################################
 # DATA
 ##################################################################################
@@ -22,7 +21,6 @@ module "vpc" {
   map_public_ip_on_launch = var.map_public_ip_on_launch
 
   tags = local.common_tags
-
 }
 
 # SECURITY GROUPS #
@@ -50,7 +48,6 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = local.common_tags
-
 }
 
 # Nginx security group 
