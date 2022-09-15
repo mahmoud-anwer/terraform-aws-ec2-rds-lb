@@ -26,6 +26,22 @@ resource "aws_security_group" "alb_sg" {
 
   #Allow HTTP from anywhere
   ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  #allow all outbound
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  #Allow HTTP from anywhere
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -43,10 +59,10 @@ resource "aws_security_group" "alb_sg" {
   tags = local.common_tags
 }
 
-# Nginx security group 
+# EC2 security group 
 #######################
-resource "aws_security_group" "nginx_sg" {
-  name   = "nginx_sg"
+resource "aws_security_group" "ec2_sg" {
+  name   = "ec2_sg"
   vpc_id = module.vpc.vpc_id
 
   # HTTP access from VPC
@@ -54,8 +70,8 @@ resource "aws_security_group" "nginx_sg" {
     from_port = 80
     to_port   = 80
     protocol  = "tcp"
-    #cidr_blocks = [var.vpc_cidr_block]
-    cidr_blocks = ["0.0.0.0/0"]
+    # cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.alb_sg.id]
   }
 
   # outbound internet access
@@ -96,7 +112,7 @@ resource "aws_security_group" "rds_sg" {
     to_port   = 3306
     protocol  = "tcp"
     #cidr_blocks = [var.vpc_cidr_block]
-    security_groups = [aws_security_group.nginx_sg.id]
+    security_groups = [aws_security_group.ec2_sg.id]
   }
 
   # outbound internet access

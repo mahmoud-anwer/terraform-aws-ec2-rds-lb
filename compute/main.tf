@@ -10,7 +10,7 @@ module "ec2_instance" {
   instance_type          = var.instance_type
   key_name               = "terraform-key-00"
   monitoring             = false
-  vpc_security_group_ids = [data.terraform_remote_state.networking.outputs.nginx_sg]
+  vpc_security_group_ids = [data.terraform_remote_state.networking.outputs.ec2_sg]
   subnet_id              = data.terraform_remote_state.networking.outputs.vpc_public_subnets[0]
   iam_instance_profile   = data.terraform_remote_state.objectstorage.outputs.nginx_profile
   
