@@ -33,6 +33,7 @@ module "alb" {
       targets = {
         ec2_1 = {
           target_id = data.terraform_remote_state.compute.outputs.instance_1_id
+          # I think I can remove this port the next time I will deploy because I already have the backend_port configured
           port      = 80
         },
         ec2_2 = {
@@ -47,7 +48,7 @@ module "alb" {
     {
       port               = 443
       protocol           = "HTTPS"
-      certificate_arn    = "arn:aws:acm:us-east-1:644827746812:certificate/58ee0ac1-7b41-43d7-9108-7210c0cd8475"
+      certificate_arn    = var.certificate_arn
       target_group_index = 0
       #===============================
       # Requests otherwise not routed
