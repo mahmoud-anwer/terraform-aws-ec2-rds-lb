@@ -29,9 +29,14 @@ module "alb" {
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"
+      #   Working with two instances into my target group
       targets = {
-        my_target = {
-          target_id = data.terraform_remote_state.compute.outputs.instance_id
+        ec2_1 = {
+          target_id = data.terraform_remote_state.compute.outputs.instance_1_id
+          port      = 80
+        },
+        ec2_2 = {
+          target_id = data.terraform_remote_state.compute.outputs.instance_2_id
           port      = 80
         }
       }
@@ -56,26 +61,26 @@ module "alb" {
     }
   ]
 
-  https_listener_rules = [{
-
-    http_tcp_listener_index = 0
-    # priority              = 5000
-    actions = [{
-      type = "forward"
-      target_groups = [
-        {
-          target_group_index = 1
+  https_listener_rules = [
+    {
+      http_tcp_listener_index = 0
+      # priority              = 5000
+      actions = [{
+        type = "forward"
+        target_groups = [
+          {
+            target_group_index = 1
+        }]
+        stickiness = {
+          enabled  = true
+          duration = 3600
+        }
       }]
-      stickiness = {
-        enabled  = true
-        duration = 3600
-      }
-    }]
-    conditions = [{
-      host_headers = ["terraform-task.ibtik.com"]
-    }]
-
-  }]
+      conditions = [{
+        host_headers = ["terraform-task.ibtik.com"]
+      }]
+    }
+  ]
 
   http_tcp_listeners = [
     {

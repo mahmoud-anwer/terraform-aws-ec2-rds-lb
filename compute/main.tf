@@ -4,8 +4,9 @@ module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "4.1.4"
 
-  name = "web server"
+  for_each = toset(["1", "2"])
 
+  name = "web server-${each.key}"
   ami                    = nonsensitive(data.aws_ssm_parameter.ami.value)
   instance_type          = var.instance_type
   key_name               = "terraform-key-00"
